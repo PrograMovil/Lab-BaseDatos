@@ -11,6 +11,14 @@ public class Estudiante {
     String apellido2;
     int edad;
 
+    public Estudiante() {
+        this.id = 0;
+        this.nombre = "";
+        this.apellido1 = "";
+        this.apellido2 = "";
+        this.edad = 0;
+    }
+
     public int getId() {
         return id;
     }

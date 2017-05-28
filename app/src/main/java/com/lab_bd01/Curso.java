@@ -10,6 +10,13 @@ public class Curso {
     String descripcion;
     int creditos;
 
+    public Curso() {
+        this.id = 0;
+        this.nombre = "";
+        this.descripcion = "";
+        this.creditos = 0;
+    }
+
     public int getId() {
         return id;
     }
