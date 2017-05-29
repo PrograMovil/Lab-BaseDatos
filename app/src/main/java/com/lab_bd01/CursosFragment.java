@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lab_bd01.Modelo.Curso;
+
 import java.util.ArrayList;
 
 /**
@@ -22,31 +24,34 @@ public class CursosFragment extends Fragment {
 
     ArrayList<Curso> cursosList = new ArrayList<Curso>();
     RecyclerView cursosRecycler;
+    BaseDatos basedatos;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        basedatos=new BaseDatos(getContext());
         initializeList();
         getActivity().setTitle("Lista de Cursos");
     }
 
     public void initializeList() {
         cursosList.clear();
-        for(int i =0;i<7;i++){
+        cursosList=basedatos.getListaCursos();
+        /*for(int i =0;i<7;i++){
             Curso curso = new Curso();
             curso.setId(i+1);
             curso.setNombre("Curso "+i);
             curso.setDescripcion("Descripcion del curso "+i);
             curso.setCreditos(4);
             cursosList.add(curso);
-        }
+        }*/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_curso_card, container, false);
+        View view = inflater.inflate(R.layout.curso_card, container, false);
         cursosRecycler = (RecyclerView) view.findViewById(R.id.cursoCardsView);
         cursosRecycler.setHasFixedSize(true);
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());

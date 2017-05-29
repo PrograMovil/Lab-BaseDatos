@@ -1,4 +1,4 @@
-package com.lab_bd01;
+package com.lab_bd01.Modelo;
 
 /**
  * Created by SheshoVega on 28/05/2017.
@@ -9,12 +9,14 @@ public class Curso {
     String nombre;
     String descripcion;
     int creditos;
+    Estudiante estudiante;
 
     public Curso() {
         this.id = 0;
         this.nombre = "";
         this.descripcion = "";
         this.creditos = 0;
+        this.estudiante=null;
     }
 
     public int getId() {
@@ -47,5 +49,13 @@ public class Curso {
 
     public void setCreditos(int creditos) {
         this.creditos = creditos;
+    }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 }

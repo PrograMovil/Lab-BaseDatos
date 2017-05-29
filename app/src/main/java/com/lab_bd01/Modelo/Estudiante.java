@@ -1,4 +1,4 @@
-package com.lab_bd01;
+package com.lab_bd01.Modelo;
 
 /**
  * Created by SheshoVega on 28/05/2017.

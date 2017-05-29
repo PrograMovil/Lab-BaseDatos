@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,16 +7,22 @@
     android:orientation="vertical"
     tools:context="com.lab_bd01.MainActivity">
 
+
     <Button
-        android:id="@+id/addCursoBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Agregar Curso" />
+        android:id="@+id/botonCrudEstudiantes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:text="Mantenimiento de Estudiantes" />
 
-    <FrameLayout
-        android:id="@+id/fragmentCursosContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
-
-</LinearLayout>
+    <Button
+        android:id="@+id/botonCrudCursos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/botonCrudEstudiantes"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="72dp"
+        android:text="Mantenimiento de Cursos" />
+</RelativeLayout>
