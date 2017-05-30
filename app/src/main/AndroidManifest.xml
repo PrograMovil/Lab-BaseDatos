@@ -15,9 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CursoActivity" />
         <activity android:name=".CursosActivity" />
-        <activity android:name=".EstudiantesActivity"></activity>
+        <activity android:name=".EstudiantesActivity" />
+        <activity android:name=".FormCursoActivity" />
+        <activity android:name=".FormEstudianteActivity" />
     </application>
 
 </manifest>

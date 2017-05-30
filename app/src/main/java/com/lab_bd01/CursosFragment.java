@@ -1,5 +1,6 @@
 package com.lab_bd01;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -125,7 +126,10 @@ public class CursosFragment extends Fragment {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Editando Curso...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Editar Curso...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), FormCursoActivity.class);
+                    intent.putExtra("accion",2);
+                    CursosFragment.this.startActivity(intent);
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by SheshoVega on 29/05/2017.
@@ -32,7 +33,11 @@ public class FormCursoActivity extends Activity {
         this.guardar = (Button) findViewById(R.id.guardarCurso);
 
         // <-- jalar accion del intent y setearla
-//        this.accion =
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            this.accion = extras.getInt("accion");
+            Toast.makeText(this, "Accion: "+ this.accion, Toast.LENGTH_SHORT).show();
+        }
         //  jalar accion del intent -->
 
         if(this.accion == 1) {
