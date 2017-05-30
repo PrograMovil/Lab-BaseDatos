@@ -46,16 +46,6 @@ public class FormCursoActivity extends Activity {
         this.guardar = (Button) findViewById(R.id.guardarCurso);
         this.spinner=(Spinner) findViewById(R.id.spinnerEstudiante);
 
-        //cargando datos en spinner
-        ArrayList<String> nombresEstudiantes=new ArrayList<>();
-        final ArrayList<Estudiante> estudiantes=basedatos.getListaEstudiantes();
-        for (int i=0;i<estudiantes.size();i++)
-            nombresEstudiantes.add(estudiantes.get(i).getNombre());
-
-        final ArrayAdapter<String> spinner_carreras = new  ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, nombresEstudiantes);
-
-        spinner.setAdapter(spinner_carreras);
-
         // <-- jalar accion del intent y setearla
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -64,10 +54,27 @@ public class FormCursoActivity extends Activity {
         }
         //  jalar accion del intent -->
 
+        //cargando datos en spinner
+        ArrayList<String> nombresEstudiantes=new ArrayList<>();
+        ArrayList<Estudiante> estudiantesBase=basedatos.getListaEstudiantes();
+
+
+
+
         if(this.accion == 1) {
             TextView textoID=(TextView) findViewById(R.id.idCurLabel);
             idCurso.setVisibility(View.INVISIBLE);
             textoID.setVisibility(View.INVISIBLE);
+
+            final ArrayList<Estudiante> estudiantes = estudiantesBase;
+
+            for (int i=0;i<estudiantes.size();i++) {
+                nombresEstudiantes.add(estudiantes.get(i).getNombre());
+            }
+            final ArrayAdapter<String> spinner_carreras = new  ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, nombresEstudiantes);
+
+            spinner.setAdapter(spinner_carreras);
+
             this.guardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -152,7 +159,21 @@ public class FormCursoActivity extends Activity {
             });
         }
         else if(this.accion == 2){
+
             this.cargarDatos();
+
+            final ArrayList<Estudiante> estudiantes;
+            if(mCurso.getEstudiante() != null){
+                estudiantes = this.reordenarListaEstudiantes(mCurso.getEstudiante(),estudiantesBase);
+            }else {
+                estudiantes = estudiantesBase;
+            }
+            for (int i=0;i<estudiantes.size();i++) {
+                nombresEstudiantes.add(estudiantes.get(i).getNombre());
+            }
+            final ArrayAdapter<String> spinner_carreras = new  ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, nombresEstudiantes);
+
+            spinner.setAdapter(spinner_carreras);
 
             this.guardar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -242,4 +263,16 @@ public class FormCursoActivity extends Activity {
         descripcion.setText(mCurso.getDescripcion());
         creditos.setText(Integer.toString(mCurso.getCreditos()));
     }
+
+    public ArrayList<Estudiante> reordenarListaEstudiantes(Estudiante estudiante, ArrayList<Estudiante> estudiantes){
+        ArrayList<Estudiante> listaNueva = new ArrayList<Estudiante>();
+        listaNueva.add(estudiante);
+        for(Estudiante est : estudiantes){
+            if(est.getId() != estudiante.getId()){
+                listaNueva.add(est);
+            }
+        }
+        return listaNueva;
+    }
+
 }
