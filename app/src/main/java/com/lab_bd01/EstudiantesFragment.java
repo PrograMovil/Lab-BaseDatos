@@ -26,20 +26,20 @@ public class EstudiantesFragment extends Fragment {
 
     ArrayList<Estudiante> estudiantesList = new ArrayList<Estudiante>();
     RecyclerView estudiantesRecycler;
-//    BaseDatos basedatos;
+    BaseDatos basedatos;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        basedatos=new BaseDatos(getContext());
+        basedatos=BaseDatos.getInstance(getContext());
         initializeList();
         getActivity().setTitle("Lista de Cursos");
     }
 
     public void initializeList() {
         estudiantesList.clear();
-//        estudiantesList=basedatos.getListaEstudiantes();
-        for(int i =0;i<7;i++){
+        estudiantesList=basedatos.getListaEstudiantes();
+        /*for(int i =0;i<7;i++){
             Estudiante estudiante = new Estudiante();
             estudiante.setId(i+1);
             estudiante.setNombre("Estudiante "+i);
@@ -47,7 +47,7 @@ public class EstudiantesFragment extends Fragment {
             estudiante.setApellido2("2do ape del estu "+i);
             estudiante.setEdad(18);
             estudiantesList.add(estudiante);
-        }
+        }*/
     }
 
     @Override
@@ -131,16 +131,37 @@ public class EstudiantesFragment extends Fragment {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int position=getAdapterPosition();
                     Toast.makeText(getActivity(), "Editar Estudiante...", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), FormEstudianteActivity.class);
-                    intent.putExtra("accion",2);
-                    EstudiantesFragment.this.startActivity(intent);
+                    if (position != RecyclerView.NO_POSITION) {
+                        Estudiante estudiante = estudiantesList.get(position);
+                        intent.putExtra("accion",2);
+                        intent.putExtra("estudiante",estudiante);
+                        EstudiantesFragment.this.startActivity(intent);
+                    }
+
+
+
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Eliminando Estudiante...", Toast.LENGTH_SHORT).show();
+                    try{
+                        int position=getAdapterPosition();
+
+                        if(basedatos.deleteEstudiante(estudiantesList.get(position))){
+                            Toast.makeText(getActivity(), "Estudiante Eliminado...", Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                            startActivity(getActivity().getIntent());
+                        }
+                        else{
+                            Toast.makeText(getActivity(), "Estudiante Asociado a un curso, elimine los cursos asociados primero", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (Exception e){
+                        Toast.makeText(getActivity(), "Error al eliminar el estudiante", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }

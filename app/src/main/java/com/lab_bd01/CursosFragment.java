@@ -17,35 +17,33 @@ import com.lab_bd01.Modelo.Curso;
 
 import java.util.ArrayList;
 
-/**
- * Created by SheshoVega on 28/05/2017.
- */
 
 public class CursosFragment extends Fragment {
 
     ArrayList<Curso> cursosList = new ArrayList<Curso>();
     RecyclerView cursosRecycler;
-//    BaseDatos basedatos;
+    BaseDatos basedatos;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        basedatos=new BaseDatos(getContext());
+        basedatos=BaseDatos.getInstance(getContext());
         initializeList();
         getActivity().setTitle("Lista de Cursos");
     }
 
     public void initializeList() {
         cursosList.clear();
-//        cursosList=basedatos.getListaCursos();
-        for(int i =0;i<7;i++){
+        basedatos.getReadableDatabase();
+        cursosList=basedatos.getListaCursos();
+        /*for(int i =0;i<7;i++){
             Curso curso = new Curso();
             curso.setId(i+1);
             curso.setNombre("Curso "+i);
             curso.setDescripcion("Descripcion del curso "+i);
             curso.setCreditos(4);
             cursosList.add(curso);
-        }
+        }*/
     }
 
     @Override
@@ -95,6 +93,7 @@ public class CursosFragment extends Fragment {
             holder.nombreText.setText(list.get(position).getNombre());
             holder.descripcionText.setText(list.get(position).getDescripcion());
             holder.creditosText.setText(String.valueOf(list.get(position).getCreditos()));
+            holder.estudiante.setText(list.get(position).getEstudiante().getNombre());
         }
 
         @Override
@@ -109,6 +108,7 @@ public class CursosFragment extends Fragment {
         public TextView nombreText;
         public TextView descripcionText;
         public TextView creditosText;
+        public TextView estudiante;
 
         public ImageView edit;
         public ImageView delete;
@@ -119,6 +119,7 @@ public class CursosFragment extends Fragment {
             nombreText = (TextView) v.findViewById(R.id.nombreCursoText);
             descripcionText = (TextView) v.findViewById(R.id.descripcionCursoText);
             creditosText = (TextView) v.findViewById(R.id.creditosCursoText);
+            estudiante=(TextView) v.findViewById(R.id.estudianteCurso);
 
             edit = (ImageView) v.findViewById(R.id.editCurso);
             delete = (ImageView) v.findViewById(R.id.deleteCurso);
@@ -126,16 +127,30 @@ public class CursosFragment extends Fragment {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Editar Curso...", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), FormCursoActivity.class);
-                    intent.putExtra("accion",2);
-                    CursosFragment.this.startActivity(intent);
+
+                    int position=getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION) {
+                        Intent intent = new Intent(getActivity(), FormCursoActivity.class);
+                        Curso curso = cursosList.get(position);
+                        intent.putExtra("accion",2);
+                        intent.putExtra("curso",curso);
+                        CursosFragment.this.startActivity(intent);
+                    }
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Eliminando Curso...", Toast.LENGTH_SHORT).show();
+                    try{
+                        int position=getAdapterPosition();
+                        basedatos.deletecurso(cursosList.get(position));
+                        Toast.makeText(getActivity(), "Curso Eliminado...", Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
+                        startActivity(getActivity().getIntent());
+                    }catch (Exception e){
+                        Toast.makeText(getActivity(), "Error al eliminar el curso", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }

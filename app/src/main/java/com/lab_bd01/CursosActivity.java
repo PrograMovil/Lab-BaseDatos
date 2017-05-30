@@ -23,7 +23,6 @@ public class CursosActivity extends AppCompatActivity {
         addCursoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CursosActivity.this, "Agregar Curso...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CursosActivity.this, FormCursoActivity.class);
                 intent.putExtra("accion",1);
                 CursosActivity.this.startActivity(intent);

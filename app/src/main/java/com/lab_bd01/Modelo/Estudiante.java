@@ -1,10 +1,10 @@
 package com.lab_bd01.Modelo;
 
-/**
- * Created by SheshoVega on 28/05/2017.
- */
+import java.io.Serializable;
 
-public class Estudiante {
+
+
+public class Estudiante implements Serializable {
     int id;
     String nombre;
     String apellido1;
