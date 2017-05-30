@@ -58,23 +58,7 @@ public class BaseDatos extends SQLiteOpenHelper {
         Log.d("Base de Datos", "Tabla estudiante");
         db.execSQL(crear_curso);
         Log.d("Base de Datos", "Tabla curso");
-/*
-        db.execSQL("create table Estudiante ("
-                + "id integer PRIMARY KEY,"
-                + "nombre  text,"
-                + "apellido1 text,"
-                + "apellido2  text,"
-                + "edad  integer);");
 
-        db.execSQL("create table Curso ("
-                + "id integer PRIMARY KEY autoincrement, "
-                + "nombre text,"
-                + "descripcion text,"
-                + "creditos integer,"
-                + "estudiante_id integer,"
-                + "FOREIGN KEY (estudiante_id) REFERENCES Estudiante(id));");
-
-*/
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -87,10 +71,8 @@ public class BaseDatos extends SQLiteOpenHelper {
     }
 
 
+    //singleton para usar la misma instancia
     public static synchronized BaseDatos getInstance(Context context) {
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
             sInstance = new BaseDatos(context.getApplicationContext());
         }
@@ -207,6 +189,34 @@ public class BaseDatos extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<Estudiante> getEstudiantesLike(String busqueda){
+        try{
+            SQLiteDatabase db=this.getReadableDatabase();
+            String query= "select * from Estudiante where id like '%%%"+busqueda+"%%%' or nombre like '%%%"+busqueda+"%%%' or apellido1 like '%%%"+busqueda+"%%%' or apellido2 like '%%%"+busqueda+"%%%' or edad like '%%%"+busqueda+"%%%';";
+
+            Cursor cursor = db.rawQuery(query,null);
+            ArrayList<Estudiante> lista=new ArrayList<>();
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Estudiante aux=new Estudiante();
+                    aux.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                    aux.setNombre(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
+                    aux.setApellido1(cursor.getString(cursor.getColumnIndexOrThrow("apellido1")));
+                    aux.setApellido2(cursor.getString(cursor.getColumnIndexOrThrow("apellido2")));
+                    aux.setEdad(cursor.getInt(cursor.getColumnIndexOrThrow("edad")));
+                    lista.add(aux);
+                    cursor.moveToNext();
+                }
+            }
+
+            return lista;
+
+        }catch (SQLiteException ex){
+            Log.e("Base de Datos", "Excepcion en getListaEstudiantes", ex);
+            return null;
+        }
+    }
+
 
 
 
@@ -292,6 +302,61 @@ public class BaseDatos extends SQLiteOpenHelper {
         try{
             SQLiteDatabase db=this.getReadableDatabase();
             String query= "select * from Curso;";
+            Cursor cursor = db.rawQuery(query,null);
+            ArrayList<Curso> lista=new ArrayList<>();
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Curso aux=new Curso();
+                    aux.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                    aux.setNombre(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
+                    aux.setDescripcion(cursor.getString(cursor.getColumnIndexOrThrow("descripcion")));
+                    aux.setCreditos(cursor.getInt(cursor.getColumnIndexOrThrow("creditos")));
+                    aux.setEstudiante(estudianteById(cursor.getInt(cursor.getColumnIndexOrThrow("estudiante_id"))));
+                    lista.add(aux);
+                    cursor.moveToNext();
+                }
+            }
+
+            return lista;
+
+        }catch (SQLiteException ex){
+            Log.e("Base de Datos", "Excepcion en getListaCursos", ex);
+            return null;
+        }
+    }
+
+    public ArrayList<Curso> getCursosLike(String busqueda){
+        try{
+            SQLiteDatabase db=this.getReadableDatabase();
+            String query= "select * from Curso where id like '%%%"+busqueda+"%%%' or nombre like '%%%"+busqueda+"%%%' or descripcion like '%%%"+busqueda+"%%%' or creditos like '%%%"+busqueda+"%%%';";
+            Cursor cursor = db.rawQuery(query,null);
+            ArrayList<Curso> lista=new ArrayList<>();
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Curso aux=new Curso();
+                    aux.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                    aux.setNombre(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
+                    aux.setDescripcion(cursor.getString(cursor.getColumnIndexOrThrow("descripcion")));
+                    aux.setCreditos(cursor.getInt(cursor.getColumnIndexOrThrow("creditos")));
+                    aux.setEstudiante(estudianteById(cursor.getInt(cursor.getColumnIndexOrThrow("estudiante_id"))));
+                    lista.add(aux);
+                    cursor.moveToNext();
+                }
+            }
+
+            return lista;
+
+        }catch (SQLiteException ex){
+            Log.e("Base de Datos", "Excepcion en getListaCursos", ex);
+            return null;
+        }
+    }
+
+
+    public ArrayList<Curso> getCursosDeEstudiante(int idEstudiante){
+        try{
+            SQLiteDatabase db=this.getReadableDatabase();
+            String query= "select * from Curso where estudiante_id='"+idEstudiante+"';";
             Cursor cursor = db.rawQuery(query,null);
             ArrayList<Curso> lista=new ArrayList<>();
             if (cursor.moveToFirst()) {

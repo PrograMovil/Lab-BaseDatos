@@ -39,7 +39,11 @@
             android:hint="digite la cedula"
             android:inputType="number"
             android:textSize="@dimen/text_size"
-            android:gravity="center|left"/>
+            android:gravity="center|left"
+            android:maxLength="9"
+            android:maxLines="1"
+            android:singleLine="true"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -66,7 +70,12 @@
             android:hint="digite el nombre"
             android:inputType="textPersonName"
             android:textSize="@dimen/text_size"
-            android:gravity="center|left"/>
+            android:gravity="center|left"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:digits="ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz "
+            />
 
     </LinearLayout>
 
@@ -94,7 +103,12 @@
             android:gravity="center|left"
             android:hint="digite el 1er apellido"
             android:inputType="textPersonName"
-            android:textSize="@dimen/text_size" />
+            android:textSize="@dimen/text_size"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:digits="ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz "
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -121,7 +135,12 @@
             android:gravity="center|left"
             android:hint="digite el 2do apellido"
             android:inputType="textPersonName"
-            android:textSize="@dimen/text_size" />
+            android:textSize="@dimen/text_size"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:digits="ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz "
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -148,7 +167,11 @@
             android:gravity="center|left"
             android:hint="digite la edad"
             android:inputType="number"
-            android:textSize="@dimen/text_size" />
+            android:textSize="@dimen/text_size"
+            android:maxLength="3"
+            android:maxLines="1"
+            android:singleLine="true"
+            />
     </LinearLayout>
 
     <Button
