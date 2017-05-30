@@ -44,7 +44,16 @@ public class MainActivity extends AppCompatActivity {
         btnCrudEst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Cargar fragment de la lista de estudiantes
+                FragmentManager fm = getSupportFragmentManager();
+                Fragment fragment = fm.findFragmentById(R.id.fragmentEstudiantesContainer);
 
+                if (fragment == null) {
+                    fragment = new EstudiantesFragment();
+                    fm.beginTransaction()
+                            .add(R.id.fragmentEstudiantesContainer, fragment)
+                            .commit();
+                }
             }
         });
 

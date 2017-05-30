@@ -24,27 +24,27 @@ public class CursosFragment extends Fragment {
 
     ArrayList<Curso> cursosList = new ArrayList<Curso>();
     RecyclerView cursosRecycler;
-    BaseDatos basedatos;
+//    BaseDatos basedatos;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        basedatos=new BaseDatos(getContext());
+//        basedatos=new BaseDatos(getContext());
         initializeList();
         getActivity().setTitle("Lista de Cursos");
     }
 
     public void initializeList() {
         cursosList.clear();
-        cursosList=basedatos.getListaCursos();
-        /*for(int i =0;i<7;i++){
+//        cursosList=basedatos.getListaCursos();
+        for(int i =0;i<7;i++){
             Curso curso = new Curso();
             curso.setId(i+1);
             curso.setNombre("Curso "+i);
             curso.setDescripcion("Descripcion del curso "+i);
             curso.setCreditos(4);
             cursosList.add(curso);
-        }*/
+        }
     }
 
     @Override
