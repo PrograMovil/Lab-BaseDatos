@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,13 +24,16 @@ public class CursosFragment extends Fragment {
     ArrayList<Curso> cursosList = new ArrayList<Curso>();
     RecyclerView cursosRecycler;
     BaseDatos basedatos;
+    Button buscarCursoBtn;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         basedatos=BaseDatos.getInstance(getContext());
         initializeList();
         getActivity().setTitle("Lista de Cursos");
+
     }
 
     public void initializeList() {
@@ -55,6 +59,28 @@ public class CursosFragment extends Fragment {
         cursosRecycler.setHasFixedSize(true);
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        buscarCursoBtn = (Button) view.findViewById(R.id.buscarCursoBtn);
+
+        if(buscarCursoBtn == null){
+            Toast.makeText(getActivity(), "Boton null: " , Toast.LENGTH_SHORT).show();
+        }else{
+            buscarCursoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cursosList.clear();
+                    Toast.makeText(getActivity(), "Buscando...", Toast.LENGTH_SHORT).show();
+                    LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
+                    MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    if (cursosList.size() >= 0 & cursosRecycler != null) {
+                        cursosRecycler.setAdapter(new ListaDeCursosAdapter(cursosList));
+                    }
+                    cursosRecycler.setLayoutManager(MyLayoutManager);
+                }
+            });
+        }
+
+
         if (cursosList.size() > 0 & cursosRecycler != null) {
             cursosRecycler.setAdapter(new ListaDeCursosAdapter(cursosList));
         }

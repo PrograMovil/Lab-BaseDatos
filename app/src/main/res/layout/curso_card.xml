@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,27 @@
     android:paddingLeft="@dimen/activity_left_margin"
     android:paddingRight="@dimen/activity_right_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context=".CursosFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/consultaCursoText"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:hint="valor a consultar"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/buscarCursoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Buscar" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cursoCardsView"
@@ -16,4 +36,4 @@
         tools:listitem="@layout/curso_items"
         />
 
-</RelativeLayout>
+</LinearLayout>
