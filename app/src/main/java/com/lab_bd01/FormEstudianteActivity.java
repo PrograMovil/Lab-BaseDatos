@@ -120,9 +120,11 @@ public class FormEstudianteActivity extends Activity {
                                     c.setId(Integer.parseInt(ced));
                                     c.setEdad(Integer.parseInt(eda));
                                     basedatos.getWritableDatabase();
-                                    basedatos.agregarEstudiante(c);
+                                    if(basedatos.agregarEstudiante(c)){
                                     Intent intent = new Intent(FormEstudianteActivity.this, EstudiantesActivity.class);
                                     FormEstudianteActivity.this.startActivity(intent);
+                                    }else Toast.makeText(getApplicationContext(),"Error, la cedula ya existe",Toast.LENGTH_SHORT).show();
+
                                 }
 
 
