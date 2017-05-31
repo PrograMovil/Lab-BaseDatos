@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,8 @@ public class EstudiantesFragment extends Fragment {
     ArrayList<Estudiante> estudiantesList = new ArrayList<Estudiante>();
     RecyclerView estudiantesRecycler;
     BaseDatos basedatos;
+    Button buscarEstudianteBtn;
+    EditText consultaText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +63,29 @@ public class EstudiantesFragment extends Fragment {
         estudiantesRecycler.setHasFixedSize(true);
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        buscarEstudianteBtn = (Button) view.findViewById(R.id.buscarEstudianteBtn);
+        consultaText = (EditText) view.findViewById(R.id.consultaEstudianteText);
+
+        buscarEstudianteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String consulta = consultaText.getText().toString();
+                estudiantesList.clear();
+                basedatos.getReadableDatabase();
+                estudiantesList=basedatos.getEstudiantesLike(consulta);
+
+//                    Toast.makeText(getActivity(), "Buscando...", Toast.LENGTH_SHORT).show();
+                LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
+                MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                if (estudiantesList.size() >= 0 & estudiantesRecycler != null) {
+                    estudiantesRecycler.setAdapter(new ListaDeEstudiantesAdapter(estudiantesList));
+                }
+                estudiantesRecycler.setLayoutManager(MyLayoutManager);
+            }
+        });
+
+
         if (estudiantesList.size() > 0 & estudiantesRecycler != null) {
             estudiantesRecycler.setAdapter(new EstudiantesFragment.ListaDeEstudiantesAdapter(estudiantesList));
         }

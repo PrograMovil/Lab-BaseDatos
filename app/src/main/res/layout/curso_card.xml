@@ -19,8 +19,9 @@
             android:id="@+id/consultaCursoText"
             android:layout_width="250dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:hint="valor a consultar"
-            android:gravity="center"/>
+            android:inputType="text" />
 
         <Button
             android:id="@+id/buscarCursoBtn"
