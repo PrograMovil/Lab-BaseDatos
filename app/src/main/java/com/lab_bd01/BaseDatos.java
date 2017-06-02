@@ -83,10 +83,10 @@ public class BaseDatos extends SQLiteOpenHelper {
 
 
 
-    public boolean agregarEstudiante(Estudiante e){
+    public boolean agregarEstudiante(int id, String nom, String ape1, String ape2, int eda){
         try{
             SQLiteDatabase db=this.getWritableDatabase();
-            db.execSQL("insert into Estudiante(id, nombre, apellido1, apellido2, edad) values ('"+e.getId()+"', '"+e.getNombre()+"', '"+e.getApellido1()+"', '"+e.getApellido2()+"', '"+e.getEdad()+"');");
+            db.execSQL("insert into Estudiante(id, nombre, apellido1, apellido2, edad) values ('"+id+"', '"+nom+"', '"+ape1+"', '"+ape2+"', '"+eda+"');");
             return true;
         }catch (SQLiteException ex){
             Log.e("Base de Datos", "Excepcion en agregar estudiante", ex);
@@ -140,10 +140,10 @@ public class BaseDatos extends SQLiteOpenHelper {
         }
     }
 
-    public boolean updateEstudiante(Estudiante e){
+    public boolean updateEstudiante(int id, String nom, String ape1, String ape2, int edad){
         try{
             SQLiteDatabase db=this.getWritableDatabase();
-            db.execSQL("update Estudiante set nombre='"+e.getNombre()+"', apellido1='"+e.getApellido1()+"', apellido2='"+e.getApellido2()+"', edad='"+e.getEdad()+"' where id="+e.getId()+";");
+            db.execSQL("update Estudiante set nombre='"+nom+"', apellido1='"+ape1+"', apellido2='"+ape2+"', edad='"+edad+"' where id="+id+";");
             return true;
         }catch (SQLiteException ex){
             Log.e("Base de Datos", "Excepcion en updateEstudiante", ex);
@@ -151,10 +151,10 @@ public class BaseDatos extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteEstudiante(Estudiante e){
+    public boolean deleteEstudiante(int id){
         try{
             SQLiteDatabase db=this.getWritableDatabase();
-            db.execSQL("delete from Estudiante where id="+e.getId()+";");
+            db.execSQL("delete from Estudiante where id="+id+";");
             return true;
         }catch (SQLiteException ex){
             Log.e("Base de Datos", "Excepcion en deleteEstudiante", ex);
@@ -223,10 +223,10 @@ public class BaseDatos extends SQLiteOpenHelper {
     //CRUD CURSO
 
 
-    public boolean agregarCurso(Curso c){
+    public boolean agregarCurso(String nom, String des, int cred, int id_est){
         try{
             SQLiteDatabase db=this.getWritableDatabase();
-            db.execSQL("insert into Curso(nombre, descripcion, creditos, estudiante_id) values ('"+c.getNombre()+"', '"+c.getDescripcion()+"', '"+c.getCreditos()+"', '"+ c.getEstudiante().getId() +"');");
+            db.execSQL("insert into Curso(nombre, descripcion, creditos, estudiante_id) values ('"+nom+"', '"+des+"', '"+cred+"', '"+id_est+"');");
             return true;
         }catch (SQLiteException ex){
             Log.e("Base de Datos", "Excepcion en agregarCurso", ex);
@@ -274,10 +274,10 @@ public class BaseDatos extends SQLiteOpenHelper {
     }
 
 
-    public boolean updateCurso(Curso c){
+    public boolean updateCurso(int id, String nom, String des, int cred, int id_est){
         try{
             SQLiteDatabase db=this.getWritableDatabase();
-            db.execSQL("update Curso set nombre='"+c.getNombre()+"', descripcion='"+c.getDescripcion()+"', creditos='"+c.getCreditos()+"', estudiante_id='"+c.getEstudiante().getId()+"' where id="+c.getId()+";");
+            db.execSQL("update Curso set nombre='"+nom+"', descripcion='"+des+"', creditos='"+cred+"', estudiante_id='"+id_est+"' where id="+id+";");
             return true;
         }catch (SQLiteException ex){
             Log.e("Base de Datos", "Excepcion en updateCurso", ex);
@@ -286,10 +286,10 @@ public class BaseDatos extends SQLiteOpenHelper {
     }
 
 
-    public boolean deletecurso(Curso c){
+    public boolean deletecurso(int id){
         try{
             SQLiteDatabase db=this.getWritableDatabase();
-            db.execSQL("delete from Curso where id="+c.getId()+";");
+            db.execSQL("delete from Curso where id="+id+";");
             return true;
         }catch (SQLiteException ex){
             Log.e("Base de Datos", "Excepcion en deleteCurso", ex);

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,17 +23,17 @@ import java.util.ArrayList;
 
 public class CursosFragment extends Fragment {
 
-    ArrayList<Curso> cursosList = new ArrayList<Curso>();
+    ArrayList<Curso> cursosList = new ArrayList<>();
     RecyclerView cursosRecycler;
-    BaseDatos basedatos;
+    Control control;
     Button buscarCursoBtn;
     EditText consultaText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        basedatos=BaseDatos.getInstance(getContext());
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        control=Control.getInstance(getContext());
         initializeList();
         getActivity().setTitle("Lista de Cursos");
 
@@ -40,16 +41,7 @@ public class CursosFragment extends Fragment {
 
     public void initializeList() {
         cursosList.clear();
-        basedatos.getReadableDatabase();
-        cursosList=basedatos.getListaCursos();
-        /*for(int i =0;i<7;i++){
-            Curso curso = new Curso();
-            curso.setId(i+1);
-            curso.setNombre("Curso "+i);
-            curso.setDescripcion("Descripcion del curso "+i);
-            curso.setCreditos(4);
-            cursosList.add(curso);
-        }*/
+        cursosList=control.getListaCursos();
     }
 
     @Override
@@ -70,10 +62,8 @@ public class CursosFragment extends Fragment {
             public void onClick(View v) {
                 String consulta = consultaText.getText().toString();
                 cursosList.clear();
-                basedatos.getReadableDatabase();
-                cursosList=basedatos.getCursosLike(consulta);
+                cursosList=control.getCursosLike(consulta);
 
-//                    Toast.makeText(getActivity(), "Buscando...", Toast.LENGTH_SHORT).show();
                 LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
                 MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 if (cursosList.size() >= 0 & cursosRecycler != null) {
@@ -173,7 +163,7 @@ public class CursosFragment extends Fragment {
                 public void onClick(View v) {
                     try{
                         int position=getAdapterPosition();
-                        basedatos.deletecurso(cursosList.get(position));
+                        control.deletecurso(cursosList.get(position).getId());
                         Toast.makeText(getActivity(), "Curso Eliminado...", Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                         startActivity(getActivity().getIntent());

@@ -1,14 +1,20 @@
 package com.lab_bd01;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,38 +26,27 @@ import com.lab_bd01.Modelo.Estudiante;
 
 import java.util.ArrayList;
 
-/**
- * Created by SheshoVega on 29/05/2017.
- */
 
 public class EstudiantesFragment extends Fragment {
 
     ArrayList<Estudiante> estudiantesList = new ArrayList<Estudiante>();
     RecyclerView estudiantesRecycler;
-    BaseDatos basedatos;
+    Control control;
     Button buscarEstudianteBtn;
     EditText consultaText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        basedatos=BaseDatos.getInstance(getContext());
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        control=Control.getInstance(getContext());
         initializeList();
         getActivity().setTitle("Lista de Cursos");
     }
 
     public void initializeList() {
         estudiantesList.clear();
-        estudiantesList=basedatos.getListaEstudiantes();
-        /*for(int i =0;i<7;i++){
-            Estudiante estudiante = new Estudiante();
-            estudiante.setId(i+1);
-            estudiante.setNombre("Estudiante "+i);
-            estudiante.setApellido1("1er ape del estu "+i);
-            estudiante.setApellido2("2do ape del estu "+i);
-            estudiante.setEdad(18);
-            estudiantesList.add(estudiante);
-        }*/
+        estudiantesList=control.getListaEstudiantes();
     }
 
     @Override
@@ -72,10 +67,8 @@ public class EstudiantesFragment extends Fragment {
             public void onClick(View v) {
                 String consulta = consultaText.getText().toString();
                 estudiantesList.clear();
-                basedatos.getReadableDatabase();
-                estudiantesList=basedatos.getEstudiantesLike(consulta);
+                estudiantesList=control.getEstudiantesLike(consulta);
 
-//                    Toast.makeText(getActivity(), "Buscando...", Toast.LENGTH_SHORT).show();
                 LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
                 MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 if (estudiantesList.size() >= 0 & estudiantesRecycler != null) {
@@ -125,6 +118,7 @@ public class EstudiantesFragment extends Fragment {
             holder.apellido1Text.setText(list.get(position).getApellido1());
             holder.apellido2Text.setText(list.get(position).getApellido2());
             holder.edadText.setText(String.valueOf(list.get(position).getEdad()));
+
         }
 
         @Override
@@ -140,6 +134,7 @@ public class EstudiantesFragment extends Fragment {
         public TextView apellido1Text;
         public TextView apellido2Text;
         public TextView edadText;
+        public TextView cursosEstudianteText;
 
         public ImageView edit;
         public ImageView delete;
@@ -151,6 +146,7 @@ public class EstudiantesFragment extends Fragment {
             apellido1Text = (TextView) v.findViewById(R.id.apellido1EstudianteText);
             apellido2Text = (TextView) v.findViewById(R.id.apellido2EstudianteText);
             edadText = (TextView) v.findViewById(R.id.edadEstudianteText);
+            cursosEstudianteText=(TextView) v.findViewById(R.id.cursosDeEstudiante);
 
             edit = (ImageView) v.findViewById(R.id.editEstudiante);
             delete = (ImageView) v.findViewById(R.id.deleteEstudiante);
@@ -178,19 +174,50 @@ public class EstudiantesFragment extends Fragment {
                     try{
                         int position=getAdapterPosition();
 
-                        if(basedatos.deleteEstudiante(estudiantesList.get(position))){
+                        if(control.deleteEstudiante(estudiantesList.get(position).getId())){
                             Toast.makeText(getActivity(), "Estudiante Eliminado...", Toast.LENGTH_SHORT).show();
                             getActivity().finish();
                             startActivity(getActivity().getIntent());
                         }
                         else{
-                            Toast.makeText(getActivity(), "Estudiante Asociado a un curso, elimine los cursos asociados primero", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Elimine los cursos asociados al estudiante antes de continuar", Toast.LENGTH_SHORT).show();
                         }
                     }catch (Exception e){
                         Toast.makeText(getActivity(), "Error al eliminar el estudiante", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+
+            cursosEstudianteText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+                    builderSingle.setTitle("Cursos del estudiante");
+                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item);
+                    int position=getAdapterPosition();
+                    ArrayList<Curso> curEst=control.getCursosDeEstudiante(estudiantesList.get(position).getId());
+                    for(Curso c : curEst){
+                        arrayAdapter.add(c.getNombre());
+                    }
+
+                    builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builderSingle.show();
+
+                }
+            });
+
         }
     }
 

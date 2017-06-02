@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,14 +26,14 @@ public class FormEstudianteActivity extends Activity {
     EditText edad;
     Button guardar;
     Estudiante mEstudiante;
-    BaseDatos basedatos;
+    Control control;
     int accion = 0; // 1 si es guardar 2 si es actualizar
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_estudiante);
-        basedatos=BaseDatos.getInstance(this);
+        control=Control.getInstance(this);
         this.idEstudiante = (EditText) findViewById(R.id.idEstudiante);
         this.nombreEstudiante = (EditText) findViewById(R.id.nombreEstudiante);
         this.apellido1 = (EditText) findViewById(R.id.apellido1);
@@ -45,7 +46,6 @@ public class FormEstudianteActivity extends Activity {
         if(extras != null){
             this.accion = extras.getInt("accion");
             this.mEstudiante=(Estudiante) extras.get("estudiante");
-            Toast.makeText(this, "Accion: "+ this.accion, Toast.LENGTH_SHORT).show();
         }
         //  jalar accion del intent -->
 
@@ -113,16 +113,10 @@ public class FormEstudianteActivity extends Activity {
                                 if (cancel) {
                                     focusView.requestFocus();
                                 } else {
-                                    Estudiante c=new Estudiante();
-                                    c.setNombre(nom);
-                                    c.setApellido1(ape1);
-                                    c.setApellido2(ape2);
-                                    c.setId(Integer.parseInt(ced));
-                                    c.setEdad(Integer.parseInt(eda));
-                                    basedatos.getWritableDatabase();
-                                    if(basedatos.agregarEstudiante(c)){
-                                    Intent intent = new Intent(FormEstudianteActivity.this, EstudiantesActivity.class);
-                                    FormEstudianteActivity.this.startActivity(intent);
+                                    if(control.agregarEstudiante(Integer.parseInt(ced),nom,ape1,ape2,Integer.parseInt(eda))){
+                                        Intent intent = new Intent(FormEstudianteActivity.this, EstudiantesActivity.class);
+                                        Toast.makeText(getApplicationContext(),"Estudiante agregado",Toast.LENGTH_SHORT).show();
+                                        FormEstudianteActivity.this.startActivity(intent);
                                     }else Toast.makeText(getApplicationContext(),"Error, la cedula ya existe",Toast.LENGTH_SHORT).show();
 
                                 }
@@ -216,14 +210,7 @@ public class FormEstudianteActivity extends Activity {
                             if (cancel) {
                                 focusView.requestFocus();
                             } else {
-                                Estudiante c=new Estudiante();
-                                c.setNombre(nom);
-                                c.setApellido1(ape1);
-                                c.setApellido2(ape2);
-                                c.setId(Integer.parseInt(ced));
-                                c.setEdad(Integer.parseInt(eda));
-                                basedatos.getWritableDatabase();
-                                if(basedatos.updateEstudiante(c)){
+                                if(control.updateEstudiante(Integer.parseInt(ced),nom, ape1, ape2, Integer.parseInt(eda))){
                                     Toast.makeText(getApplicationContext(),"Estudiante editado",Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(FormEstudianteActivity.this, EstudiantesActivity.class);
                                     FormEstudianteActivity.this.startActivity(intent);

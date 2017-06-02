@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class EstudiantesActivity extends AppCompatActivity {
 
@@ -29,6 +28,8 @@ public class EstudiantesActivity extends AppCompatActivity {
             }
         });
 
+
+
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentEstudiantesContainer);
         if (fragment == null) {
@@ -38,4 +39,14 @@ public class EstudiantesActivity extends AppCompatActivity {
                     .commit();
         }
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent intent = new Intent(EstudiantesActivity.this, MainActivity.class);
+        intent.putExtra("accion",1);
+        EstudiantesActivity.this.startActivity(intent);
+    }
+
 }

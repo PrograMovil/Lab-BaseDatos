@@ -141,6 +141,17 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+                <TextView
+                    android:id="@+id/cursosDeEstudiante"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/cursos_estudiante"
+                    android:textSize="14dp"
+                    android:layout_marginTop="25dp"
+                    android:textColor="@color/colorPrimary"
+                    />
+
         </LinearLayout>
 
         <LinearLayout

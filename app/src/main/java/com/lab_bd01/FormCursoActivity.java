@@ -31,14 +31,14 @@ public class FormCursoActivity extends Activity {
     Button guardar;
     int accion = 0; // 1 si es guardar 2 si es actualizar
     Curso mCurso;
-    BaseDatos basedatos;
+    Control control;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_curso);
 
-        basedatos=BaseDatos.getInstance(this);
+        control=Control.getInstance(this);
         this.idCurso = (TextView) findViewById(R.id.idCurso);
         this.nombreCurso = (EditText) findViewById(R.id.nombreCurso);
         this.descripcion = (EditText) findViewById(R.id.descripcion);
@@ -56,7 +56,7 @@ public class FormCursoActivity extends Activity {
 
         //cargando datos en spinner
         ArrayList<String> nombresEstudiantes=new ArrayList<>();
-        ArrayList<Estudiante> estudiantesBase=basedatos.getListaEstudiantes();
+        ArrayList<Estudiante> estudiantesBase=control.getListaEstudiantes();
 
 
 
@@ -131,8 +131,7 @@ public class FormCursoActivity extends Activity {
                                     c.setDescripcion(desc);
                                     c.setCreditos(Integer.parseInt(cre));
                                     c.setEstudiante(estudiantes.get(spinner.getSelectedItemPosition()));
-                                    basedatos.getWritableDatabase();
-                                    basedatos.agregarCurso(c);
+                                    control.agregarCurso(nom, desc, Integer.parseInt(cre), estudiantes.get(spinner.getSelectedItemPosition()).getId());
                                     Intent intent = new Intent(FormCursoActivity.this, CursosActivity.class);
                                     FormCursoActivity.this.startActivity(intent);
                                 }
@@ -226,17 +225,10 @@ public class FormCursoActivity extends Activity {
                                 if (cancel) {
                                     focusView.requestFocus();
                                 } else {
-                                    Curso c=new Curso();
-                                    c.setNombre(nom);
-                                    c.setDescripcion(desc);
-                                    c.setCreditos(Integer.parseInt(cre));
-                                    c.setEstudiante(estudiantes.get(spinner.getSelectedItemPosition()));
-                                    c.setId(Integer.parseInt(idCurso.getText().toString()));
-                                    basedatos.getWritableDatabase();
-                                    if(basedatos.updateCurso(c)){
-                                    Toast.makeText(getApplicationContext(),"Curso Editado",Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(FormCursoActivity.this, CursosActivity.class);
-                                    FormCursoActivity.this.startActivity(intent);
+                                    if(control.updateCurso(Integer.parseInt(idCurso.getText().toString()), nom, desc, Integer.parseInt(cre), estudiantes.get(spinner.getSelectedItemPosition()).getId())){
+                                        Toast.makeText(getApplicationContext(),"Curso Editado",Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(FormCursoActivity.this, CursosActivity.class);
+                                        FormCursoActivity.this.startActivity(intent);
                                     }
                                     else Toast.makeText(getApplicationContext(),"Error al editar el curso",Toast.LENGTH_SHORT).show();
                                 }
